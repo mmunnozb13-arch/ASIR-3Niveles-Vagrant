@@ -85,4 +85,4 @@ Comprobación final desde el navegador accediendo a `https://marcos-asir.duckdns
 
 ## 6. Screencast de funcionamiento
 
-El vídeo demostrando el funcionamiento del balanceo HTTPS y la conexión a la base de datos se encuentra incluido en este repositorio en el archivo [`demo.webm`](demo.webm).
+El vídeo demostrando el funcionamiento del balanceo HTTPS y la conexión a la base de datos se encuentra incluido en este repositorio en el archivo <video src="https://github.com/mmunnozb13-arch/ASIR-3Niveles-Vagrant/raw/main/demo.mp4" controls width="100%"></video>.
