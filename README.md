@@ -1,12 +1,20 @@
 # Práctica ASIR: Infraestructura de 3 Niveles con Vagrant, UFW y HTTPS
 
-En esta práctica he desplegado una infraestructura web dividida en tres capas utilizando **Vagrant** y **VirtualBox** sobre Fedora. El objetivo es separar la capa de entrada (balanceador), la capa de aplicación (servidores web) y la capa de datos (MariaDB), asegurando las comunicaciones con cortafuegos y añadiendo cifrado HTTPS con un certificado válido.
+## Índice
+1. [Introducción y arquitectura](#1-introducción-y-arquitectura)
+2. [Estructura del proyecto](#2-estructura-del-proyecto)
+3. [Seguridad y cortafuegos (UFW)](#3-seguridad-y-cortafuegos-ufw)
+4. [Certificado HTTPS con DuckDNS y Certbot](#4-certificado-https-con-duckdns-y-certbot)
+5. [Configuración HTTPS en Nginx y pruebas finales](#5-configuración-https-en-nginx-y-pruebas-finales)
+6. [Screencast de funcionamiento](#6-screencast-de-funcionamiento)
 
 ---
 
-## 1. Arquitectura y máquinas virtuales
+## 1. Introducción y arquitectura
 
-El entorno está compuesto por 4 máquinas virtuales conectadas mediante dos redes internas aisladas (`red_frontal` y `red_datos`):
+En esta práctica he desplegado una infraestructura web dividida en tres capas utilizando **Vagrant** y **VirtualBox** sobre Fedora. El objetivo es separar la capa de entrada (balanceador expuesto), la capa de aplicación (servidores web en red privada) y la capa de datos (MariaDB en red privada aislada), asegurando las comunicaciones con cortafuegos y añadiendo cifrado HTTPS con un certificado válido.
+
+El entorno está compuesto por 4 máquinas virtuales nombradas según el formato solicitado (`MarcosMunozBarrosoBalanceador`, `MarcosMunozBarrosoWeb1`, `MarcosMunozBarrosoWeb2` y `MarcosMunozBarrosoBBDD`) conectadas mediante dos redes internas aisladas (`red_frontal` y `red_datos`):
 
 | Máquina | Función | IP Red Frontal | IP Red Datos | Puertos abiertos |
 | :--- | :--- | :--- | :--- | :--- |
@@ -30,7 +38,7 @@ El entorno está compuesto por 4 máquinas virtuales conectadas mediante dos red
 
 ## 3. Seguridad y cortafuegos (UFW)
 
-Para proteger cada capa de la arquitectura se ha configurado **UFW** con políticas restrictivas por defecto:
+Para proteger cada capa de la arquitectura (haciendo el equivalente a listas de control de acceso y grupos de seguridad) se ha configurado **UFW** con políticas restrictivas por defecto:
 
 - **Balanceador:** Bloquea el tráfico entrante por defecto y permite SSH desde la red de gestión (`10.0.2.0/24`), además de HTTP (`80`) y HTTPS (`443`).
 - **Servidores Web (`web1` y `web2`):** Bloquean tanto la entrada como la salida por defecto. Solo permiten SSH, tráfico HTTP entrante desde la IP del balanceador (`192.168.10.10`) y salida hacia el puerto `3306` de la base de datos (`192.168.20.10`).
@@ -72,3 +80,9 @@ Comprobación final desde el navegador accediendo a `https://marcos-asir.duckdns
 ![Navegador HTTPS Web1](img/05-navegador-https-web1.png)
 
 ![Navegador HTTPS Web2](img/06-navegador-https-web2.png)
+
+---
+
+## 6. Screencast de funcionamiento
+
+El vídeo demostrando el funcionamiento del balanceo HTTPS y la conexión a la base de datos se encuentra incluido en este repositorio en el archivo [`demo.webm`](demo.webm).
